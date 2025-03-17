@@ -2,6 +2,12 @@
 
 trying bun
 
+## Requirements
+
+- Bun v1.2.5 [installation docs](https://bun.sh/docs/installation)
+
+## Installation
+
 To install dependencies:
 
 ```bash
