@@ -1,12 +1,12 @@
 import * as React from "react";
 
-import { Circle, CircleCheck, CircleX } from "lucide-react";
+import { Eraser } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/lib/components/ui/input";
+import { Button } from "@/lib/components/ui/button";
 
 import { cn } from "@/lib/utils";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useWebSocket } from "@/lib/hooks/useWebSocket";
 
 export function WebSocketTester() {
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
@@ -19,7 +19,7 @@ export function WebSocketTester() {
     disconnect,
     sendMessage,
     clearMessages,
-  } = useWebSocket();
+  } = useWebSocket({ autoConnect: true });
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -38,28 +38,19 @@ export function WebSocketTester() {
     <div className="mt-8 mx-auto w-full max-w-2xl text-left flex flex-col gap-4">
       <div className="flex items-center gap-2">
         <h2 className="inline-flex items-center gap-2 text-xl font-bold">
-          WebSocket Tester{" "}
-          {isConnected ? (
-            <CircleCheck className="h-5 w-5 text-green-500" />
-          ) : (
-            <CircleX className="h-5 w-5 text-red-500" />
-          )}
+          WebSocket Tester
         </h2>
 
         <div className="ml-auto flex items-center gap-2">
           {!isConnected ? (
-            <Button onClick={connect} variant="default">
+            <Button onClick={connect} variant="secondary">
               Connect
             </Button>
           ) : (
-            <Button onClick={disconnect} variant="default">
+            <Button onClick={disconnect} variant="destructive">
               Disconnect
             </Button>
           )}
-
-          <Button onClick={clearMessages} variant="outline">
-            Clear
-          </Button>
         </div>
       </div>
 
@@ -67,14 +58,26 @@ export function WebSocketTester() {
         className={cn(
           "w-full h-[300px] bg-card overflow-y-auto",
           "border border-input rounded-xl p-3",
-          "font-mono text-sm"
+          "font-mono text-sm relative"
         )}
       >
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={clearMessages}
+          className="sticky top-0 z-10 mb-4"
+          disabled={messages.length === 0}
+        >
+          <Eraser className="h-4 w-4" />
+        </Button>
+
         {messages.length === 0 ? (
-          <div className="text-muted-foreground text-xs italic text-center h-full flex items-center justify-center">
+          <div className="text-muted-foreground text-xs italic text-center h-auto flex items-center justify-center">
             No messages yet.
             <br />
-            Connect to the WebSocket server and send a message.
+            {isConnected
+              ? "Send a message !"
+              : "Connect to the WebSocket server to send messages."}
           </div>
         ) : (
           messages.map((msg, index) => {
@@ -99,7 +102,7 @@ export function WebSocketTester() {
                 className={cn(
                   "not-last:mb-4 p-2 rounded-lg max-w-[80%]",
                   msg.direction === "sent"
-                    ? "bg-primary text-primary-foreground ml-auto"
+                    ? "bg-secondary text-secondary-foreground ml-auto"
                     : "bg-muted"
                 )}
               >

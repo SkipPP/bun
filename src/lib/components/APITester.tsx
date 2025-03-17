@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { Select } from "./ui/select";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/lib/components/ui/input";
+import { Select } from "@/lib/components/ui/select";
+import { Button } from "@/lib/components/ui/button";
 
 import { cn } from "@/lib/utils";
 
@@ -39,7 +39,7 @@ export function APITester() {
         <h2 className="text-xl font-bold">API Tester</h2>
 
         <div className="ml-auto flex items-center gap-2">
-          <Select name="method" defaultValue="GET" variant="outline">
+          <Select name="method" defaultValue="GET" variant="secondary">
             <option value="GET">GET</option>
             <option value="PUT">PUT</option>
           </Select>

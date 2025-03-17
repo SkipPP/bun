@@ -1,5 +1,5 @@
-import { APITester } from "@/components/APITester";
-import { WebSocketTester } from "@/components/WebSocketTester";
+import { APITester } from "@/lib/components/APITester";
+import { WebSocketTester } from "@/lib/components/WebSocketTester";
 
 import "@/lib/styles/globals.css";
 
