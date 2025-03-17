@@ -8,13 +8,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import Home from "./routes";
+import IndexRoute from "./routes";
 
 const elem = document.getElementById("root")!;
 
 const app = (
   <StrictMode>
-    <Home />
+    <IndexRoute />
   </StrictMode>
 );
 

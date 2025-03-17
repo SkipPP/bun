@@ -3,6 +3,7 @@ export type Message = {
   direction: "sent" | "received";
   content: string;
   timestamp: string;
+  type?: string;
 };
 
 export type WebSocketMessage = {

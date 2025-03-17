@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 
 export function APITester() {
   const responseInputRef = React.useRef<HTMLTextAreaElement>(null);
+  const [inputValue, setInputValue] = React.useState("/api/hello");
 
   const testEndpoint = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,12 +62,13 @@ export function APITester() {
         <Input
           type="text"
           name="endpoint"
-          defaultValue="/api/hello"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
           placeholder="/api/hello"
           className="bg-card"
         />
 
-        <Button type="submit" variant="default">
+        <Button type="submit" variant="secondary" disabled={!inputValue.trim()}>
           Send
         </Button>
       </div>

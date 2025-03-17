@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Circle, CircleCheck, CircleX } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -35,7 +37,14 @@ export function WebSocketTester() {
   return (
     <div className="mt-8 mx-auto w-full max-w-2xl text-left flex flex-col gap-4">
       <div className="flex items-center gap-2">
-        <h2 className="text-xl font-bold">WebSocket Tester</h2>
+        <h2 className="inline-flex items-center gap-2 text-xl font-bold">
+          WebSocket Tester{" "}
+          {isConnected ? (
+            <CircleCheck className="h-5 w-5 text-green-500" />
+          ) : (
+            <CircleX className="h-5 w-5 text-red-500" />
+          )}
+        </h2>
 
         <div className="ml-auto flex items-center gap-2">
           {!isConnected ? (
@@ -43,7 +52,7 @@ export function WebSocketTester() {
               Connect
             </Button>
           ) : (
-            <Button onClick={disconnect} variant="destructive">
+            <Button onClick={disconnect} variant="default">
               Disconnect
             </Button>
           )}
@@ -62,34 +71,49 @@ export function WebSocketTester() {
         )}
       >
         {messages.length === 0 ? (
-          <div className="text-muted-foreground text-center h-full flex items-center justify-center">
+          <div className="text-muted-foreground text-xs italic text-center h-full flex items-center justify-center">
             No messages yet.
             <br />
             Connect to the WebSocket server and send a message.
           </div>
         ) : (
-          messages.map((msg, index) => (
-            <div
-              key={index}
-              className={cn(
-                "mb-2 p-2 rounded-lg max-w-[80%]",
-                msg.direction === "sent"
-                  ? "bg-primary text-primary-foreground ml-auto"
-                  : "bg-muted"
-              )}
-            >
-              <pre className="whitespace-pre-wrap break-words">
-                {msg.content}
-              </pre>
+          messages.map((msg, index) => {
+            const isLastMessage = index === messages.length - 1;
 
-              <div className="text-xs opacity-70 mt-1">
-                {new Date(msg.timestamp).toLocaleTimeString()}
+            if (msg.type === "connected" || msg.type === "disconnected") {
+              return (
+                <div
+                  key={index}
+                  ref={isLastMessage ? messagesEndRef : null}
+                  className="not-last:mb-4 italic text-xs text-center text-muted-foreground"
+                >
+                  {msg.content}
+                </div>
+              );
+            }
+
+            return (
+              <div
+                key={index}
+                ref={isLastMessage ? messagesEndRef : null}
+                className={cn(
+                  "not-last:mb-4 p-2 rounded-lg max-w-[80%]",
+                  msg.direction === "sent"
+                    ? "bg-primary text-primary-foreground ml-auto"
+                    : "bg-muted"
+                )}
+              >
+                <pre className="whitespace-pre-wrap break-words">
+                  {msg.content}
+                </pre>
+
+                <div className="text-xs opacity-70 mt-1">
+                  {new Date(msg.timestamp).toLocaleTimeString()}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
-
-        <div ref={messagesEndRef} />
       </div>
 
       <form onSubmit={handleSubmit} className="flex items-center gap-2">
@@ -101,7 +125,6 @@ export function WebSocketTester() {
             isConnected ? "Type a message..." : "Connect to send messages..."
           }
           disabled={!isConnected}
-          className="flex-1 font-mono"
         />
 
         <Button

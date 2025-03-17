@@ -6,14 +6,8 @@ export function setupWebSocketHandlers() {
     // WebSocket event handlers
     open(ws) {
       console.log("WebSocket connection opened");
+
       activeConnections.add(ws);
-      ws.send(
-        JSON.stringify({
-          type: "welcome",
-          message: "Connected to WebSocket server",
-          timestamp: new Date().toISOString(),
-        })
-      );
     },
 
     message(ws, message: string) {
@@ -26,28 +20,17 @@ export function setupWebSocketHandlers() {
           const data = JSON.parse(message);
 
           // Echo the message back with a timestamp
-          ws.send(
-            JSON.stringify({
-              type: "echo",
-              data,
-              timestamp: new Date().toISOString(),
-            })
-          );
+          ws.send(JSON.stringify(data));
         }
       } catch (e) {
         // If parsing fails, just echo back the raw message
-        ws.send(
-          JSON.stringify({
-            type: "echo",
-            data: message,
-            timestamp: new Date().toISOString(),
-          })
-        );
+        ws.send(JSON.stringify(message));
       }
     },
 
     close(ws) {
       console.log("WebSocket connection closed");
+
       activeConnections.delete(ws);
     },
 

@@ -38,6 +38,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
         direction: "received",
         content: "Connected to WebSocket server",
         timestamp: new Date().toISOString(),
+        type: "connected",
       });
 
       if (onOpen) onOpen(event);
@@ -70,6 +71,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
         direction: "received",
         content: "Disconnected from WebSocket server",
         timestamp: new Date().toISOString(),
+        type: "disconnected",
       });
 
       if (onClose) onClose(event);
